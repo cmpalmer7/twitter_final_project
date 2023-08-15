@@ -1,0 +1,14 @@
+
+requests
+
+tweepy
+
+transformers
+
+torch
+
+xformers
+
+emoji
+
+python-dotenv

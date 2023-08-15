@@ -3,6 +3,11 @@ from transformers import pipeline
 from statistics import mean
 from app.alpha import BEARER_TOKEN
 
+def to_percent(numerator,denominator):
+  #Takes two a numerator and denominator and returns a formatted percentage
+  
+  return f"{round((numerator/denominator)*100)}%"
+
 specific_model = pipeline(model="finiteautomata/bertweet-base-sentiment-analysis")
 
 
@@ -45,7 +50,7 @@ print(f"NUMBER OF TWEETS: {len(scores)}")
 
 print(f"AVERAGE SCORE: {round(mean(scores),3)}")
 
-print(f"PERCENTAGE POSITIVE SENTIMENT: {round(len(pos_score_type)/(len(scores))*100)}%")
+print(f"PERCENTAGE POSITIVE SENTIMENT: {to_percent(len(pos_score_type),len(scores))}")
 
 print(f"MOST NEGATIVE SCORE: {round(min(scores),3)} - {tweets[int(neg_tweet)]}")
 
