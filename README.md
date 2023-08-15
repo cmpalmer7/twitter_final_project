@@ -29,8 +29,16 @@ Install third-party packages:
 pip install -r requirements.txt
 ```
 
+## Usage
+
 Run the tweet report:
 
 ```sh
 python -m app.tweets
+```
+
+## Testing
+
+```sh
+pytest
 ```
