@@ -12,3 +12,5 @@ xformers
 emoji
 
 python-dotenv
+
+pytest

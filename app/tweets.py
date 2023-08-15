@@ -4,54 +4,58 @@ from statistics import mean
 from app.alpha import BEARER_TOKEN
 
 def to_percent(numerator,denominator):
-  #Takes two a numerator and denominator and returns a formatted percentage
-  
-  return f"{round((numerator/denominator)*100)}%"
+    """
+    Takes a numerator and denominator and returns a formatted percentage
+    """
+    
+    return f"{round((numerator/denominator)*100)}%"
 
-specific_model = pipeline(model="finiteautomata/bertweet-base-sentiment-analysis")
+if __name__ == "__main__":
 
-
-client = tweepy.Client(BEARER_TOKEN)
-
-keyword = input("What would you like to search for, please be specific: ")
-
-query = (f"{keyword} -is:retweet")
-
-response = client.search_recent_tweets(query=query, max_results=50)
-
-tweets = []
-scores = []
-pos_score_type = []
-neg_score_type = []
+    specific_model = pipeline(model="finiteautomata/bertweet-base-sentiment-analysis")
 
 
-for t in response.data:
-  tweets.append(t["text"])
+    client = tweepy.Client(BEARER_TOKEN)
 
-data_analysis = specific_model(tweets)
+    keyword = input("What would you like to search for, please be specific: ")
 
-for x in data_analysis:
-  if x['label'] == 'POS':
-    scores.append(x['score'])
-    pos_score_type.append(x['label'])
-  elif x['label'] == 'NEG':
-    scores.append(x['score']*-1)
-    neg_score_type.append(x['label'])
-  else:
-    scores.append(0)
+    query = (f"{keyword} -is:retweet")
 
-neg_tweet = scores.index(min(scores))
+    response = client.search_recent_tweets(query=query, max_results=50)
 
-pos_tweet = scores.index(max(scores))
+    tweets = []
+    scores = []
+    pos_score_type = []
+    neg_score_type = []
 
-print(f"KEYWORD: {keyword}")
 
-print(f"NUMBER OF TWEETS: {len(scores)}")
+    for t in response.data:
+        tweets.append(t["text"])
 
-print(f"AVERAGE SCORE: {round(mean(scores),3)}")
+    data_analysis = specific_model(tweets)
 
-print(f"PERCENTAGE POSITIVE SENTIMENT: {to_percent(len(pos_score_type),len(scores))}")
+    for x in data_analysis:
+        if x['label'] == 'POS':
+            scores.append(x['score'])
+            pos_score_type.append(x['label'])
+        elif x['label'] == 'NEG':
+            scores.append(x['score']*-1)
+            neg_score_type.append(x['label'])
+        else:
+            scores.append(0)
 
-print(f"MOST NEGATIVE SCORE: {round(min(scores),3)} - {tweets[int(neg_tweet)]}")
+    neg_tweet = scores.index(min(scores))
 
-print(f"MOST POSITIVE SCORE: {round(max(scores),3)} - {tweets[int(pos_tweet)]}")
+    pos_tweet = scores.index(max(scores))
+
+    print(f"KEYWORD: {keyword}")
+
+    print(f"NUMBER OF TWEETS: {len(scores)}")
+
+    print(f"AVERAGE SCORE: {round(mean(scores),3)}")
+
+    print(f"PERCENTAGE POSITIVE SENTIMENT: {to_percent(len(pos_score_type),len(scores))}")
+
+    print(f"MOST NEGATIVE SCORE: {round(min(scores),3)} - {tweets[int(neg_tweet)]}")
+
+    print(f"MOST POSITIVE SCORE: {round(max(scores),3)} - {tweets[int(pos_tweet)]}")
