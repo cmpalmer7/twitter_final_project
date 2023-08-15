@@ -2,6 +2,10 @@ import tweepy
 from transformers import pipeline
 from statistics import mean
 from app.alpha import BEARER_TOKEN
+import plotly.express
+
+#Help from https://www.youtube.com/watch?v=0EekpQBEP_8
+#Help from https://favtutor.com/blogs/get-list-index-python#:~:text=The%20index()%20method%20returns,index('item_name').
 
 def to_percent(numerator,denominator):
     """
@@ -27,6 +31,7 @@ if __name__ == "__main__":
     scores = []
     pos_score_type = []
     neg_score_type = []
+    neu_score_type = []
 
 
     for t in response.data:
@@ -43,6 +48,7 @@ if __name__ == "__main__":
             neg_score_type.append(x['label'])
         else:
             scores.append(0)
+            neu_score_type.append(x['label'])
 
     neg_tweet = scores.index(min(scores))
 
@@ -59,3 +65,11 @@ if __name__ == "__main__":
     print(f"MOST NEGATIVE SCORE: {round(min(scores),3)} - {tweets[int(neg_tweet)]}")
 
     print(f"MOST POSITIVE SCORE: {round(max(scores),3)} - {tweets[int(pos_tweet)]}")
+
+    score_types = ["Positive", "Neutral", "Negative"]
+
+    score_counts = [len(pos_score_type)/len(scores),len(neu_score_type)/len(scores),len(neg_score_type)/len(scores)]
+
+    fig = plotly.express.bar(x=score_types, y=score_counts, title=f"Sentiment Analysis for: {keyword}", labels={"x":"Sentiment Type", "y":"Percentage of Tweets"})
+
+    fig.show()

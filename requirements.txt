@@ -14,3 +14,7 @@ emoji
 python-dotenv
 
 pytest
+
+plotly
+
+pandas
