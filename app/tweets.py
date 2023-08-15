@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     query = (f"{keyword} -is:retweet")
 
-    response = client.search_recent_tweets(query=query, max_results=50)
+    response = client.search_recent_tweets(query=query, max_results=100)
 
     tweets = []
     scores = []
